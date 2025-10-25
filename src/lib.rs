@@ -1,3 +1,4 @@
+#![doc = include_str!("../README.md")]
 use std::path::PathBuf;
 
 use iced::{
@@ -11,14 +12,18 @@ use crate::image::GlitchImage;
 
 mod image;
 
+/// The main application state for Glitch.
 #[derive(Debug, Default)]
 pub struct GlitchApp {
     current_image: Option<GlitchImage>,
 }
 
+/// Messages that can be sent to the Glitch application.
 #[derive(Debug, Clone)]
 pub enum GlitchMessage {
+    /// Load an image from the specified file path.
     LoadImage(PathBuf),
+    /// No operation.
     None,
 }
 

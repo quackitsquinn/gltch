@@ -11,3 +11,7 @@ log = "0.4.28"
 rfd = "0.15.4"
 smol = "2.0.2"
 wgpu = "27.0.1"
+
+
+[lints.rust]
+missing_docs = "forbid"

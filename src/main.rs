@@ -1,3 +1,4 @@
+//! Main entry point for the Glitch application.
 use gltch::GlitchApp;
 
 fn main() -> iced::Result {
