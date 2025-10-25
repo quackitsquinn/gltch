@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 env_logger = "0.11.8"
-iced = {version = "0.13.1", features = ["image"]}
+iced = {git = "https://github.com/iced-rs/iced", branch = "master", commit = "92888a3639bdfb8e4ebea91e752d25825d8d8886", features = ["image"]}
 image = "0.25.8"
 log = "0.4.28"
 rfd = "0.15.4"
