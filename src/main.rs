@@ -1,5 +1,6 @@
-use gltch::GltchApp;
+use gltch::GlitchApp;
 
 fn main() -> iced::Result {
-    iced::run("GLXTCH", GltchApp::update, GltchApp::view)
+    env_logger::init();
+    iced::run("GLXTCH", GlitchApp::update, GlitchApp::view)
 }
