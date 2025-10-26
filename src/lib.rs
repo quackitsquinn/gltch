@@ -2,7 +2,7 @@
 use std::path::PathBuf;
 
 use iced::{
-    Element, Length,
+    Element,
     widget::{self, button, image::viewer, text},
 };
 
@@ -24,7 +24,7 @@ pub enum GlitchMessage {
     /// Load an image from the specified file path.
     LoadImage(PathBuf),
     /// No operation.
-    None,
+    NoOp,
 }
 
 impl GlitchApp {
@@ -46,7 +46,7 @@ impl GlitchApp {
             GlitchMessage::LoadImage(path) => {
                 self.load_image(path);
             }
-            GlitchMessage::None => {}
+            GlitchMessage::NoOp => {}
         }
     }
 
@@ -70,7 +70,7 @@ impl GlitchApp {
         if let Some(file) = file {
             GlitchMessage::LoadImage(file)
         } else {
-            GlitchMessage::None
+            GlitchMessage::NoOp
         }
     }
 }

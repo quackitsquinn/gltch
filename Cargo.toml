@@ -15,3 +15,8 @@ wgpu = "27.0.1"
 
 [lints.rust]
 missing_docs = "forbid"
+unsafe_op_in_unsafe_fn = "forbid"
+
+[lints.clippy]
+# I believe this is the best compromise for reducing unsafe code usage without being too convoluted when unsafe code is necessary.
+undocumented_unsafe_blocks = "forbid"
