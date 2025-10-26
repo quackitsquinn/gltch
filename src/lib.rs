@@ -10,7 +10,7 @@ use log::{debug, error, info};
 
 use crate::image::GlitchImage;
 
-mod image;
+pub mod image;
 
 /// The main application state for Glitch.
 #[derive(Debug, Default)]

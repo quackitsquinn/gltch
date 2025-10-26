@@ -1,17 +1,24 @@
+//! Image handling for Glitch.
 use std::path::{Path, PathBuf};
 
 use iced::widget::image::Handle;
 use image::{ColorType, GenericImageView, RgbaImage};
 use log::{error, info};
 
+/// A struct representing an image loaded in Glitch.
 #[derive(Debug)]
+
 pub struct GlitchImage {
+    /// The file path of the image.
     pub file: PathBuf,
+    /// The image data.
     pub image: image::RgbaImage,
+    /// The Iced image handle. This will likely be refactored out later to replace the redundant cloning of image data.
     pub handle: Option<Handle>,
 }
 
 impl GlitchImage {
+    /// Opens an image from the given file path.
     pub fn open(file: impl AsRef<Path>) -> Result<Self, image::ImageError> {
         let file = file.as_ref().to_path_buf();
         let img = image::open(&file)?;
@@ -39,10 +46,12 @@ impl GlitchImage {
         })
     }
 
+    /// Returns a reference to the Iced image handle.
     pub fn handle(&self) -> &Handle {
         self.handle.as_ref().unwrap()
     }
 
+    /// Updates the image data and refreshes the Iced image handle.
     pub fn update_with(&mut self, img: RgbaImage) {
         let (width, height) = img.dimensions();
         info!(
