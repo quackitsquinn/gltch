@@ -5,13 +5,14 @@ edition = "2024"
 
 [dependencies]
 env_logger = "0.11.8"
-iced = {git = "https://github.com/iced-rs/iced", branch = "master", commit = "92888a3639bdfb8e4ebea91e752d25825d8d8886", features = ["image"]}
+iced = {version = "0.14.0-dev", features = ["image"]}
 image = "0.25.8"
 log = "0.4.28"
 rfd = "0.15.4"
 smol = "2.0.2"
 wgpu = "27.0.1"
 bytes = "1.6"
+iced_aw = {git = "https://github.com/iced-rs/iced_aw.git", branch = "main", commit = "f49e058684b6e03a49b94c0ae6d9fb40db6ef2a2"}
 
 [lints.rust]
 missing_docs = "forbid"
@@ -20,3 +21,8 @@ unsafe_op_in_unsafe_fn = "forbid"
 [lints.clippy]
 # I believe this is the best compromise for reducing unsafe code usage without being too convoluted when unsafe code is necessary.
 undocumented_unsafe_blocks = "forbid"
+
+[patch.crates-io]
+iced = { git = "https://github.com/iced-rs/iced.git",   commit = "92888a3639bdfb8e4ebea91e752d25825d8d8886" }
+iced_core = { git = "https://github.com/iced-rs/iced.git",  commit = "92888a3639bdfb8e4ebea91e752d25825d8d8886" }
+iced_widget = { git = "https://github.com/iced-rs/iced.git",  commit = "92888a3639bdfb8e4ebea91e752d25825d8d8886" }

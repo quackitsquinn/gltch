@@ -8,6 +8,8 @@ Ever wanted to use pixel sorting or glitch art techniques on your art but didn't
 - GPU-accelerated pixel sorting using headless [WGPU](https://wgpu.rs/) and compute shaders
 - A nice [Iced](https://iced.rs/) GUI for tweaking parameters and loading/saving images
 - Presets for common pixel sorting and glitch art styles
+- Per-channel sorting and effects
+- Support for 16-bit images
 - Support for loading and saving common image formats using [image-rs](https://github.com/image-rs/image)
 - A file format to encode everything above for easy sharing of presets and images
 - All done using cross-platform Rust libraries for maximum compatibility

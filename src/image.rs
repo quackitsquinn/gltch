@@ -27,6 +27,7 @@ impl GlitchImage {
     /// Opens an image from the given file path.
     pub fn open(file: impl AsRef<Path>) -> Result<Self, image::ImageError> {
         let file = file.as_ref().to_path_buf();
+        // FIXME: Use a custom implementation to directly load into an Arc buffer to avoid double allocation.
         let img = image::open(&file)?;
         let (width, height) = img.dimensions();
 
