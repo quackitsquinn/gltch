@@ -1,27 +1,24 @@
 #![doc = include_str!("../README.md")]
 use std::path::PathBuf;
 
-use iced::{
-    Element, Length,
-    overlay::menu::{self, Menu},
-    widget::{self, button, column, image::viewer, row, text},
-};
+use iced::{Element, widget::image::Handle};
 
-use iced_aw::number_input;
 use log::{debug, error, info};
 
 use crate::{
-    image::GlitchImage,
+    image::{GlitchImage, GlitchImageBuffer},
     sort::cpu::{CpuSorter, ValueGenerator},
 };
 
 pub mod image;
 pub mod sort;
+mod ui;
 
 /// The main application state for Glitch.
 #[derive(Debug, Default)]
 pub struct GlitchApp {
     current_image: Option<GlitchImage>,
+    current_view: Option<(GlitchImageBuffer, Handle)>,
     sorter: CpuSorter<PixelBrightness>,
 }
 
@@ -71,8 +68,7 @@ impl GlitchApp {
             GlitchMessage::DoSort => {
                 if let Some(image) = &mut self.current_image {
                     info!("Starting sort operation...");
-                    let sorted_image = self.sorter.sort(&image.image);
-                    image.update_with(sorted_image);
+                    self.current_view = Some(self.sorter.sort(&image.image));
                     info!("Sort operation completed.");
                 } else {
                     error!("No image loaded to sort.");
@@ -82,56 +78,21 @@ impl GlitchApp {
         }
     }
 
+    /// Returns the handle of the image currently being displayed.
+    pub fn display_image(&self) -> Option<&Handle> {
+        if let Some((_, handle)) = &self.current_view {
+            Some(handle)
+        } else if let Some(img) = &self.current_image {
+            Some(img.handle())
+        } else {
+            error!("No image to display!");
+            None
+        }
+    }
+
     /// View the current state of the application as an Iced Element.
     pub fn view(&self) -> Element<'_, GlitchMessage> {
-        if let Some(handle) = &self.current_image {
-            widget::column![
-                self.toolbar(),
-                viewer(handle.handle().clone())
-                    .width(Length::Fill)
-                    .height(Length::Fill)
-            ]
-            .into()
-        } else {
-            widget::column![
-                text("No image loaded"),
-                button("Load Image...").on_press_with(Self::pick_file)
-            ]
-            .into()
-        }
-    }
-
-    fn toolbar(&self) -> Element<'_, GlitchMessage> {
-        row![
-            button("Load Image...").on_press_with(Self::pick_file),
-            column![
-                number_input(&self.sorter.config.min_threshold(), 0..255, |n| {
-                    GlitchMessage::SetLowerThreshold(n)
-                })
-                .step(1),
-                text("Min Threshold"),
-            ],
-            column![
-                number_input(&self.sorter.config.max_threshold(), 0..255, |n| {
-                    GlitchMessage::SetUpperThreshold(n)
-                })
-                .step(1),
-                text("Max Threshold"),
-            ],
-            button("Sort Image (may take a second)").on_press(GlitchMessage::DoSort),
-        ]
-        .into()
-    }
-
-    fn pick_file() -> GlitchMessage {
-        let file = rfd::FileDialog::new()
-            .add_filter("Images", &["png", "jpg", "gif", "tiff", "tif"])
-            .pick_file();
-        if let Some(file) = file {
-            GlitchMessage::LoadImage(file)
-        } else {
-            GlitchMessage::NoOp
-        }
+        ui::main_view(self)
     }
 }
 

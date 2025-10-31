@@ -1,10 +1,14 @@
 //! CPU-based pixel sorting.
+//!
+//! This was more a less just a refresher on how to implement pixel sorting algorithms and will likely
+//! be removed in favor of GPU-based sorting in the future.
 
+use iced::widget::image::Handle;
 use iced_aw::style::badge::info;
 use image::ImageBuffer;
 use log::info;
 
-use crate::image::GlitchImageBuffer;
+use crate::image::{GlitchImageBuffer, make_handle};
 
 /// CPU-based pixel sorter.
 pub struct CpuSorter<V: ValueGenerator> {
@@ -33,7 +37,7 @@ impl<V: ValueGenerator> CpuSorter<V> {
     }
 
     /// Sorts the given image using the CPU-based algorithm.
-    pub fn sort(&mut self, image: &GlitchImageBuffer) -> GlitchImageBuffer {
+    pub fn sort(&mut self, image: &GlitchImageBuffer) -> (GlitchImageBuffer, Handle) {
         self.current_image = Some(
             ImageBuffer::from_raw(image.width(), image.height(), image.as_raw().to_vec())
                 .expect("Incorrect size for image!"),
@@ -65,7 +69,12 @@ impl<V: ValueGenerator> CpuSorter<V> {
 
         let image = self.current_image.take().expect("no image");
         let (width, height) = image.dimensions();
-        GlitchImageBuffer::from_raw(width, height, image.into_raw().into()).expect("infallible")
+
+        let arc_buffer = GlitchImageBuffer::from_raw(width, height, image.into_raw().into())
+            .expect("infallible");
+        let handle = make_handle(&arc_buffer);
+
+        (arc_buffer, handle)
     }
 
     /// Replaces each pixel's alpha channel with the generated value.

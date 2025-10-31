@@ -47,7 +47,7 @@ impl GlitchImage {
         let image_buf: GlitchImageBuffer =
             ImageBuffer::from_raw(width, height, arc.clone()).expect("failed to convert to arc");
         // Now, create the Iced Handle from the raw RGBA data. Thankfully, Bytes::from_owned exists and supports Arc.
-        let handle = Self::make_handle(&image_buf);
+        let handle = make_handle(&image_buf);
 
         Ok(GlitchImage {
             file,
@@ -72,12 +72,14 @@ impl GlitchImage {
         );
 
         self.image = img;
-        self.handle = Some(Self::make_handle(&self.image));
+        self.handle = Some(make_handle(&self.image));
     }
+}
 
-    fn make_handle(image: &GlitchImageBuffer) -> Handle {
-        let (width, height) = image.dimensions();
-        let image_data = image.as_raw().clone();
-        Handle::from_rgba(width, height, Bytes::from_owner(image_data))
-    }
+/// Creates an Iced image handle from the given image buffer.
+/// This is just a utility function and does not have to be used with [GlitchImage].
+pub fn make_handle(image: &GlitchImageBuffer) -> Handle {
+    let (width, height) = image.dimensions();
+    let image_data = image.as_raw().clone();
+    Handle::from_rgba(width, height, Bytes::from_owner(image_data))
 }
